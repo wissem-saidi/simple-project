@@ -1,7 +1,8 @@
 ---
 - name: "Build a container with ansible"
-  hosts: localhost
-  connection: local
+  hosts: 192.168.42.200
+  become: yes
+  remote_user: root
   tasks:
     - name: stop current running container
       command: docker stop web-container
