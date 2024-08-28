@@ -17,7 +17,7 @@ spec:
           image: saidiwissem/web-app:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 8080
+            - containerPort: 8080 # Container port to match the targetPort in the service
 
 ---
 
@@ -32,5 +32,5 @@ spec:
     - protocol: TCP
       port: 80          # Port exposed by the service
       targetPort: 8080  # Port on the container
-      nodePort: 30007   # Port on each node where the service will be accessible
-  type: NodePort       # Change type to NodePort
+      nodePort: 30007   # NodePort for external access
+  type: NodePort       # Service type
