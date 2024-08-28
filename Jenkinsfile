@@ -39,6 +39,8 @@ pipeline {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', 'docker-cred') {
                         sh "docker build -t saidiwissem/web-app:latest ."
+                        // Optionally push the image to Docker Hub
+                        sh "docker push saidiwissem/web-app:latest"
                     }
                 }
             }
@@ -62,9 +64,11 @@ pipeline {
             steps {
                 withKubeConfig(credentialsId: 'kubeconfig', serverUrl: 'https://192.168.1.210:6443') {
                     script {
-                        def podsStatus = sh(script: "kubectl get pods -n default", returnStatus: true)
-                        def svcStatus = sh(script: "kubectl get svc -n default", returnStatus: true)
-                        if (podsStatus != 0 || svcStatus != 0) {
+                        def podsStatus = sh(script: "kubectl get pods -n default", returnStdout: true).trim()
+                        def svcStatus = sh(script: "kubectl get svc -n default", returnStdout: true).trim()
+                        echo "Pods Status:\n${podsStatus}"
+                        echo "Services Status:\n${svcStatus}"
+                        if (podsStatus.contains('0/1') || svcStatus.contains('0')) {
                             error "Failed to verify Kubernetes deployment"
                         }
                     }
