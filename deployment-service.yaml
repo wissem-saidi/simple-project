@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: webapp-deployment
 spec:
-  replicas: 2
+  replicas: 2  # Number of pod replicas
   selector:
     matchLabels:
       app: webapp
@@ -13,24 +13,23 @@ spec:
         app: webapp
     spec:
       containers:
-        - name: webapp
-          image: saidiwissem/web-app:latest
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 8080 # Container port to match the targetPort in the service
+      - name: webapp
+        image: saidiwissem/web-app:latest  # Docker image built in Jenkins
+        imagePullPolicy: Always  # Always pull the latest image
+        ports:
+        - containerPort: 8080  # Port the container listens on
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
   name: webapp-service
 spec:
   selector:
-    app: webapp
+    app: webapp  # Selects the pods with the label "app: webapp"
   ports:
-    - protocol: TCP
-      port: 80          # Port exposed by the service
-      targetPort: 8080  # Port on the container
-      nodePort: 30007   # NodePort for external access
-  type: NodePort       # Service type
+  - protocol: TCP
+    port: 80          # Port exposed by the service
+    targetPort: 8080  # Port on the container
+    nodePort: 30007   # NodePort for external access
+  type: NodePort       # Exposes the service on each Node's IP at a static port
