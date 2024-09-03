@@ -7,8 +7,8 @@ pipeline {
     }
     
     environment {
-        DOCKER_IMAGE = "your-dockerhub-username/your-image-name"
-        KUBECONFIG_CREDENTIALS = credentials('kubeconfig') // Kubernetes credentials in Jenkins
+        DOCKER_IMAGE = "saidiwissem/webapp:latest"
+        KUBECONFIG_CREDENTIALS = credentials('k8s') // Kubernetes credentials in Jenkins
         SCANNER_HOME= tool 'sonar-scanner'
     }
 
