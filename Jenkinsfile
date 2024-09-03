@@ -80,7 +80,7 @@ pipeline {
         stage('Deploy to Minikube') {
             steps {
                 script {
-                    withKubeConfig([credentialsId: 'kubeconfig']) {
+                    withKubeConfig([credentialsId: 'k8s']) {
                         sh "kubectl apply -f deployment-service.yaml"
                     }
                 }
