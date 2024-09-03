@@ -18,7 +18,17 @@ pipeline {
                 git branch: 'main', credentialsId: 'gitcred', url: 'https://github.com/wissem-saidi/simple-project.git'
             }
         }
+        stage('Compile') {
+            steps {
+                sh "mvn compile"
+            }
+        }
         
+        stage('Test') {
+            steps {
+                sh "mvn test"
+            }
+        }
         stage('File System Scan') {
             steps {
                 sh "trivy fs --format table -o trivy-fs-report.html ."
@@ -34,11 +44,10 @@ pipeline {
             }
         }
         
-        stage('Quality Gate') {
+     
+        stage('Build') {
             steps {
-                script {
-                  waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
-                }
+               sh "mvn package"
             }
         }
         
